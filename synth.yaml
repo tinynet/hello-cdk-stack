@@ -1,13 +1,65 @@
 Resources:
   MyFirstBucketB8884501:
     Type: AWS::S3::Bucket
-    Properties:
-      VersioningConfiguration:
-        Status: Enabled
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
       aws:cdk:path: HelloCdkStack/MyFirstBucket/Resource
+  MyEncryptedBucketKeyA262639F:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Statement:
+          - Action:
+              - kms:Create*
+              - kms:Describe*
+              - kms:Enable*
+              - kms:List*
+              - kms:Put*
+              - kms:Update*
+              - kms:Revoke*
+              - kms:Disable*
+              - kms:Get*
+              - kms:Delete*
+              - kms:ScheduleKeyDeletion
+              - kms:CancelKeyDeletion
+              - kms:GenerateDataKey
+              - kms:TagResource
+              - kms:UntagResource
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":iam::"
+                    - Ref: AWS::AccountId
+                    - :root
+            Resource: "*"
+        Version: "2012-10-17"
+      Description: Created by HelloCdkStack/MyEncryptedBucket
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: HelloCdkStack/MyEncryptedBucket/Key/Resource
+  MyEncryptedBucket9A8D2FE1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              KMSMasterKeyID:
+                Fn::GetAtt:
+                  - MyEncryptedBucketKeyA262639F
+                  - Arn
+              SSEAlgorithm: aws:kms
+      WebsiteConfiguration:
+        IndexDocument: index.html
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: HelloCdkStack/MyEncryptedBucket/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:

@@ -6,8 +6,13 @@ export class HelloCdkStack extends Stack {
     super(scope, id, props);
 
     new s3.Bucket(this, 'MyFirstBucket', {
-      versioned: true,
+      versioned: false,
       removalPolicy: RemovalPolicy.DESTROY
+    });
+    new s3.Bucket(this, 'MyEncryptedBucket', {
+      versioned: false,
+      encryption: s3.BucketEncryption.KMS,
+      websiteIndexDocument: 'index.html'
     });
   }
 }
