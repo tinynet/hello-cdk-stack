@@ -12,3 +12,9 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `cdk diff`        compare deployed stack with current state
  * `cdk synth`       emits the synthesized CloudFormation template
+
+ ## Manage library modules
+ AWS Construct Library modules are named like @aws-cdk/SERVICE-NAME
+ Dependencies are maintained in package.json. Update dependencies with npm update
+ 
+
