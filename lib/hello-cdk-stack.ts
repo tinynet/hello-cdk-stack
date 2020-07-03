@@ -6,7 +6,8 @@ export class HelloCdkStack extends core.Stack {
     super(scope, id, props);
 
     new s3.Bucket(this, 'MyFirstBucket', {
-      versioned: true
+      versioned: true,
+      removalPolicy: core.RemovalPolicy.DESTROY
     });
   }
 }
